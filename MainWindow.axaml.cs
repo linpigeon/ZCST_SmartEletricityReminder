@@ -19,6 +19,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = new MainWindowViewModel();
+        TryCreateTrayIcon();
     }
 
     private async void OnWindowClosing(object? sender, WindowClosingEventArgs e)
@@ -39,12 +40,6 @@ public partial class MainWindow : Window
             _isExiting = true;
             Close();
         }
-    }
-
-    protected override void OnOpened(EventArgs e)
-    {
-        base.OnOpened(e);
-        TryCreateTrayIcon();
     }
 
     private void TryCreateTrayIcon()

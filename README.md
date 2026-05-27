@@ -153,39 +153,51 @@
 
 ## 运行
 
-### GUI 模式
+项目提供两种发行版本：
 
+| 版本 | 文件名 | 大小 | 需要 .NET 10 |
+|------|--------|------|:---:|
+| **Standard** | `Standard.zip` | ~12 MB | 是 |
+| **Portable** | `Protable.zip` | ~42 MB | 否 |
+
+### Standard（依赖框架）
+
+适合已安装 .NET 10 运行时的用户，体积小。下载 `Standard.zip` 解压后：
+
+**GUI 模式：**
 ```bash
-dotnet run
+SmartEletricityReminder.exe
 ```
 
-### 自动推送模式（无 GUI）
-
-```bash
-dotnet run -- --auto
-```
-
-此模式下程序会按照 `IntervalMinutes` 设定的间隔定时查询并推送。
-
-### 构建
-
-```bash
-dotnet publish -c Release -o ./publish
-```
-
-## 发行版本使用方法
-
-1. 从 [Releases](../../releases) 下载 `publish.zip` 并解压
-2. 编辑 `appsettings.json`，填写学号、邮箱授权码等信息（参见[配置](#配置)）
-3. 双击 `SmartEletricityReminder.exe` 启动桌面 GUI
-4. （可选）创建快捷方式并加入开机自启，实现无人值守
-
-如需服务器无 GUI 部署，在命令行执行：
-
+**自动推送模式（无 GUI）：**
 ```bash
 SmartEletricityReminder.exe --auto
 ```
 
+### Portable（独立便携）
+
+无需安装任何运行时，即拷即用。下载 `Protable.zip` 解压后直接双击 `SmartEletricityReminder.exe` 启动。
+
+如需自动推送模式，在命令行执行：
+```bash
+SmartEletricityReminder.exe --auto
+```
+
+### 开发构建
+
+```bash
+dotnet run                  # GUI 模式
+dotnet run -- --auto        # 自动推送模式
+dotnet publish -c Release -o ./publish   # 构建发布
+```
+
+## 发行版本使用方法
+
+1. 从 [Releases](../../releases) 下载 `Standard.zip` 或 `Protable.zip`
+2. 解压后编辑 `appsettings.json`，填写学号、邮箱授权码等信息（参见[配置](#配置)）
+3. 双击 `SmartEletricityReminder.exe` 启动桌面 GUI
+4. （可选）创建快捷方式并加入开机自启，实现无人值守
+
 ## 许可证
 
-MIT
+本项目基于 [MIT License](LICENSE) 发布。
