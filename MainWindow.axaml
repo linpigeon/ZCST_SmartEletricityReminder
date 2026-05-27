@@ -3,7 +3,7 @@
         xmlns:vm="using:WaterElectricityAutoClient.ViewModels"
         x:Class="WaterElectricityAutoClient.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="完美校园水电查询系统" Width="760" Height="540"
+        Title="珠海科技学院宿舍电费查询与推送系统" Width="760" Height="540"
         MinWidth="580" MinHeight="420"
         Background="{DynamicResource ContentBrush}"
         Closing="OnWindowClosing">
