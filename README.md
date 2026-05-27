@@ -173,6 +173,19 @@ dotnet run -- --auto
 dotnet publish -c Release -o ./publish
 ```
 
+## 发行版本使用方法
+
+1. 从 [Releases](../../releases) 下载 `publish.zip` 并解压
+2. 编辑 `appsettings.json`，填写学号、邮箱授权码等信息（参见[配置](#配置)）
+3. 双击 `SmartEletricityReminder.exe` 启动桌面 GUI
+4. （可选）创建快捷方式并加入开机自启，实现无人值守
+
+如需服务器无 GUI 部署，在命令行执行：
+
+```bash
+SmartEletricityReminder.exe --auto
+```
+
 ## 许可证
 
 MIT
