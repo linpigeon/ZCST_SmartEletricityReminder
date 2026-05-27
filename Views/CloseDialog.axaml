@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="WaterElectricityAutoClient.Views.CloseDialog"
+        Title="关闭选项" Width="360" Height="180"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        CanResize="False"
+        Background="{DynamicResource CardBrush}">
+
+    <Window.Styles>
+        <Style Selector="Button.accent">
+            <Setter Property="Background" Value="#0078D4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.accent:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1a8ae8"/>
+        </Style>
+        <Style Selector="Button.default">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Styles>
+
+    <StackPanel Margin="24" Spacing="16">
+        <TextBlock Text="请选择关闭方式" FontSize="16" FontWeight="SemiBold"
+                   Foreground="{DynamicResource TitleBrush}"/>
+
+        <TextBlock Text="关闭窗口后，自动推送任务将继续在后台运行。"
+                   Foreground="{DynamicResource LabelBrush}" FontSize="13"
+                   TextWrapping="Wrap"/>
+
+        <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+            <Button Content="保持后台运行" Classes="accent" Width="130" Height="36"
+                    Click="OnBackgroundClick"/>
+            <Button Content="直接关闭程序" Classes="default" Width="130" Height="36"
+                    Click="OnExitClick"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

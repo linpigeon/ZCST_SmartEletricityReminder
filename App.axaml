@@ -1,0 +1,51 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="WaterElectricityAutoClient.App">
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <!-- Light theme -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="SidebarBrush" Color="#fafafa"/>
+                    <SolidColorBrush x:Key="ContentBrush" Color="#f3f3f3"/>
+                    <SolidColorBrush x:Key="CardBrush" Color="White"/>
+                    <SolidColorBrush x:Key="BorderBrush" Color="#e0e0e0"/>
+                    <SolidColorBrush x:Key="TitleBrush" Color="#1a1a1a"/>
+                    <SolidColorBrush x:Key="HeadingBrush" Color="#333"/>
+                    <SolidColorBrush x:Key="LabelBrush" Color="#666"/>
+                    <SolidColorBrush x:Key="MutedBrush" Color="#888"/>
+                    <SolidColorBrush x:Key="HintBrush" Color="#999"/>
+                    <SolidColorBrush x:Key="ValueBrush" Color="#1a1a1a"/>
+                    <SolidColorBrush x:Key="SidebarHoverBrush" Color="#e8e8e8"/>
+                    <SolidColorBrush x:Key="SidebarPressedBrush" Color="#e0e0e0"/>
+                    <SolidColorBrush x:Key="NavHoverBrush" Color="#e6e6e6"/>
+                    <SolidColorBrush x:Key="NavSelectedBrush" Color="#e0e0e0"/>
+                </ResourceDictionary>
+
+                <!-- Dark theme -->
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="SidebarBrush" Color="#1e1e1e"/>
+                    <SolidColorBrush x:Key="ContentBrush" Color="#282828"/>
+                    <SolidColorBrush x:Key="CardBrush" Color="#2d2d2d"/>
+                    <SolidColorBrush x:Key="BorderBrush" Color="#3d3d3d"/>
+                    <SolidColorBrush x:Key="TitleBrush" Color="#f0f0f0"/>
+                    <SolidColorBrush x:Key="HeadingBrush" Color="#e0e0e0"/>
+                    <SolidColorBrush x:Key="LabelBrush" Color="#aaa"/>
+                    <SolidColorBrush x:Key="MutedBrush" Color="#888"/>
+                    <SolidColorBrush x:Key="HintBrush" Color="#777"/>
+                    <SolidColorBrush x:Key="ValueBrush" Color="#f0f0f0"/>
+                    <SolidColorBrush x:Key="SidebarHoverBrush" Color="#333"/>
+                    <SolidColorBrush x:Key="SidebarPressedBrush" Color="#3a3a3a"/>
+                    <SolidColorBrush x:Key="NavHoverBrush" Color="#333"/>
+                    <SolidColorBrush x:Key="NavSelectedBrush" Color="#383838"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>

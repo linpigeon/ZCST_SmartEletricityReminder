@@ -1,0 +1,184 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:WaterElectricityAutoClient.ViewModels"
+             x:Class="WaterElectricityAutoClient.Views.PushSettingsView"
+             x:DataType="vm:PushSettingsViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.setting">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.accent">
+            <Setter Property="Background" Value="#0078D4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.accent:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1a8ae8"/>
+        </Style>
+        <Style Selector="Button.default">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ValueBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.default:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NavHoverBrush}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="16">
+            <TextBlock Text="推送设置" FontSize="22" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TitleBrush}"/>
+
+            <!-- Email settings card -->
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
+                    BoxShadow="0 1 3 0 #0F000000">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="邮件推送" FontSize="15" FontWeight="SemiBold"
+                               Foreground="{DynamicResource HeadingBrush}"/>
+
+                    <Grid ColumnDefinitions="110,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                          RowSpacing="8">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="SMTP 服务器"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SmtpServer}" Classes="setting"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="SMTP 端口"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SmtpPort}" Classes="setting" Width="100"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="发件人邮箱"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SenderEmail}" Classes="setting"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="发件人名称"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SenderName}" Classes="setting"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="授权码"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding AuthCode}" Classes="setting"
+                                 PasswordChar="&#x25CF;"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="收件人邮箱"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding RecipientEmails}" Classes="setting"
+                                 PlaceholderText="多个邮箱用分号 (;) 分隔"/>
+
+                        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                            <CheckBox IsChecked="{Binding EnableSsl}"/>
+                            <TextBlock Text="启用 SSL" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- DengDeng settings card -->
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
+                    BoxShadow="0 1 3 0 #0F000000">
+                <StackPanel Spacing="12">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <CheckBox IsChecked="{Binding DengDengEnabled}"/>
+                        <TextBlock Text="噔噔推送" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource HeadingBrush}"/>
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="80,*" RowDefinitions="Auto,Auto" RowSpacing="8"
+                          IsEnabled="{Binding DengDengEnabled}">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Base URL"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DengDengBaseUrl}" Classes="setting"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Device ID"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding DengDengDeviceId}" Classes="setting"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Threshold card -->
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
+                    BoxShadow="0 1 3 0 #0F000000">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="预警阈值" FontSize="15" FontWeight="SemiBold"
+                               Foreground="{DynamicResource HeadingBrush}"/>
+                    <Grid ColumnDefinitions="140,*">
+                        <TextBlock Grid.Column="0" Text="低余额阈值 (度)"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Column="1" Text="{Binding LowBalanceThreshold}"
+                                 Classes="setting" Width="100"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Auto-push card -->
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
+                    BoxShadow="0 1 3 0 #0F000000">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="自动推送" FontSize="15" FontWeight="SemiBold"
+                               Foreground="{DynamicResource HeadingBrush}"/>
+
+                    <Grid ColumnDefinitions="140,*" RowSpacing="8"
+                          RowDefinitions="Auto,Auto,Auto">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="推送间隔 (分钟)"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding IntervalMinutes}"
+                                 Classes="setting" Width="100"
+                                 IsEnabled="{Binding IsAutoPushRunning, Converter={x:Static BoolConverters.Not}}"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="当前选中宿舍"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding CurrentRoom.RoomName, TargetNullValue='未选择 (将推送全部)'}"
+                                   VerticalAlignment="Center" FontSize="13"
+                                   Foreground="{DynamicResource ValueBrush}"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="运行状态"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1"
+                                   Text="{Binding AutoPushStatus, TargetNullValue='闲置'}"
+                                   VerticalAlignment="Center" FontSize="13"
+                                   Foreground="{DynamicResource ValueBrush}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Action buttons -->
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
+                    BoxShadow="0 1 3 0 #0F000000">
+                <StackPanel Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="保存设置" Command="{Binding SaveSettingsCommand}"
+                                Classes="accent" Width="100" Height="34"
+                                IsEnabled="{Binding IsTesting, Converter={x:Static BoolConverters.Not}}"/>
+                        <Button Content="推送测试" Command="{Binding TestPushCommand}"
+                                Classes="default" Width="100" Height="34"
+                                IsEnabled="{Binding IsTesting, Converter={x:Static BoolConverters.Not}}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="启动自动推送" Command="{Binding StartAutoPushCommand}"
+                                Classes="accent" Width="110" Height="34"
+                                IsVisible="{Binding IsAutoPushRunning, Converter={x:Static BoolConverters.Not}}"/>
+                        <Button Content="停止自动推送" Command="{Binding StopAutoPushCommand}"
+                                Classes="default" Width="110" Height="34"
+                                IsVisible="{Binding IsAutoPushRunning}"/>
+                    </StackPanel>
+                    <ProgressBar IsIndeterminate="True" Height="3"
+                                 IsVisible="{Binding IsTesting}"
+                                 Foreground="#0078D4" Background="Transparent"/>
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource LabelBrush}"
+                               FontSize="12" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

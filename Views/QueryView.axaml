@@ -1,0 +1,121 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="using:Avalonia.Data.Converters"
+             xmlns:vm="using:WaterElectricityAutoClient.ViewModels"
+             x:Class="WaterElectricityAutoClient.Views.QueryView"
+             x:DataType="vm:QueryViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Button.accent">
+            <Setter Property="Background" Value="#0078D4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.accent:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1a8ae8"/>
+        </Style>
+        <Style Selector="Button.default">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ValueBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.default:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NavHoverBrush}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="16">
+            <TextBlock Text="房间查询" FontSize="22" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TitleBrush}"/>
+
+            <!-- Input card -->
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
+                    BoxShadow="0 1 3 0 #0F000000">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="学号查询" FontSize="15" FontWeight="SemiBold"
+                               Foreground="{DynamicResource HeadingBrush}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBox Text="{Binding Account}" Width="160" Height="34"
+                                 PlaceholderText="请输入学号"
+                                 VerticalContentAlignment="Center"/>
+                        <Button Content="保存学号" Command="{Binding SaveAccountCommand}"
+                                Classes="default" Width="82" Height="34"/>
+                        <Button Content="查询房间" Command="{Binding QueryRoomsCommand}"
+                                Classes="accent" Width="82" Height="34"
+                                IsEnabled="{Binding IsLoading, Converter={x:Static BoolConverters.Not}}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="选择宿舍" VerticalAlignment="Center" FontSize="13"
+                                   Foreground="{DynamicResource LabelBrush}"/>
+                        <ComboBox ItemsSource="{Binding Rooms}"
+                                  SelectedItem="{Binding SelectedRoom}"
+                                  Width="280" Height="34"
+                                  IsEnabled="{Binding IsLoading, Converter={x:Static BoolConverters.Not}}"
+                                  VerticalContentAlignment="Center">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="{Binding RoomName}"/>
+                                        <TextBlock Text="{Binding Odd, StringFormat='{}({0:F1}度)'}"
+                                                   Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <ProgressBar IsIndeterminate="True" Height="3"
+                                 IsVisible="{Binding IsLoading}"
+                                 Foreground="#0078D4" Background="Transparent"/>
+                    <TextBlock Text="{Binding StatusMessage}"
+                               Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Room detail card -->
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
+                    BoxShadow="0 1 3 0 #0F000000"
+                    IsVisible="{Binding SelectedRoom, Converter={x:Static conv:ObjectConverters.IsNotNull}}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="房间详情" FontSize="15" FontWeight="SemiBold"
+                               Foreground="{DynamicResource HeadingBrush}"/>
+
+                    <Grid ColumnDefinitions="90,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="8">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="房间名称"
+                                   Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                   Text="{Binding SelectedRoom.RoomName}"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource ValueBrush}"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="当前余额"
+                                   Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding SelectedRoom.Odd, StringFormat='{}{0:F2} 度'}"
+                                   FontSize="14" Foreground="#0078D4" FontWeight="SemiBold"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="累计用量"
+                                   Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1"
+                                   Text="{Binding SelectedRoom.Use, StringFormat='{}{0:F2} 度'}"
+                                   FontSize="14" Foreground="{DynamicResource ValueBrush}"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="校验码"
+                                   Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1"
+                                   Text="{Binding SelectedRoom.RoomVerify}"
+                                   FontSize="14" Foreground="{DynamicResource MutedBrush}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
