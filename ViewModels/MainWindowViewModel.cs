@@ -43,6 +43,7 @@ public partial class MainWindowViewModel : ObservableObject
         };
     }
 
+
     [RelayCommand]
     private void ToggleSidebar()
     {

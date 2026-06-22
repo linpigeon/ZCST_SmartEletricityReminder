@@ -4,6 +4,37 @@
 
     <Application.Styles>
         <FluentTheme />
+
+        <!-- Centralized Fluent button styles -->
+        <Style Selector="Button.accent">
+            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.accent:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+        </Style>
+        <Style Selector="Button.accent:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentPressedBrush}"/>
+        </Style>
+
+        <Style Selector="Button.default">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ValueBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.default:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NavHoverBrush}"/>
+        </Style>
     </Application.Styles>
 
     <Application.Resources>
@@ -25,6 +56,12 @@
                     <SolidColorBrush x:Key="SidebarPressedBrush" Color="#e0e0e0"/>
                     <SolidColorBrush x:Key="NavHoverBrush" Color="#e6e6e6"/>
                     <SolidColorBrush x:Key="NavSelectedBrush" Color="#e0e0e0"/>
+                    <!-- Fluent accent brushes -->
+                    <SolidColorBrush x:Key="AccentBrush" Color="#0078D4"/>
+                    <SolidColorBrush x:Key="AccentHoverBrush" Color="#106EBE"/>
+                    <SolidColorBrush x:Key="AccentPressedBrush" Color="#005A9E"/>
+                    <SolidColorBrush x:Key="AccentLightBrush" Color="#E5F0FF"/>
+                    <SolidColorBrush x:Key="AccentTextBrush" Color="#0078D4"/>
                 </ResourceDictionary>
 
                 <!-- Dark theme -->
@@ -43,6 +80,12 @@
                     <SolidColorBrush x:Key="SidebarPressedBrush" Color="#3a3a3a"/>
                     <SolidColorBrush x:Key="NavHoverBrush" Color="#333"/>
                     <SolidColorBrush x:Key="NavSelectedBrush" Color="#383838"/>
+                    <!-- Fluent accent brushes -->
+                    <SolidColorBrush x:Key="AccentBrush" Color="#0078D4"/>
+                    <SolidColorBrush x:Key="AccentHoverBrush" Color="#106EBE"/>
+                    <SolidColorBrush x:Key="AccentPressedBrush" Color="#005A9E"/>
+                    <SolidColorBrush x:Key="AccentLightBrush" Color="#1A3350"/>
+                    <SolidColorBrush x:Key="AccentTextBrush" Color="#60CDFF"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

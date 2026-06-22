@@ -24,3 +24,13 @@ public class DengDengSettings
     public string DeviceId { get; set; } = "";
     public bool Enabled { get; set; } = false;
 }
+
+public class MqttSettings
+{
+    public string BrokerAddress { get; set; } = "";
+    public int Port { get; set; } = 1883;
+    public string Username { get; set; } = "";
+    public string Password { get; set; } = "";
+    public string Topic { get; set; } = "electricity/reminder";
+    public bool Enabled { get; set; } = false;
+}

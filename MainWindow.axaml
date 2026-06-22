@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:WaterElectricityAutoClient.ViewModels"
+        xmlns:local="using:WaterElectricityAutoClient"
         x:Class="WaterElectricityAutoClient.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="珠海科技学院宿舍电费查询与推送系统" Width="760" Height="540"
@@ -10,20 +11,23 @@
 
     <Window.Styles>
         <Style Selector="ListBoxItem">
-            <Setter Property="CornerRadius" Value="6"/>
-            <Setter Property="Margin" Value="8,1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Margin" Value="4,1"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{DynamicResource ValueBrush}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="3,0,0,0"/>
         </Style>
         <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource NavHoverBrush}"/>
         </Style>
+        <Style Selector="ListBoxItem:selected">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TitleBrush}"/>
+        </Style>
         <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource NavSelectedBrush}"/>
-        </Style>
-        <Style Selector="ListBoxItem:selected">
-            <Setter Property="Foreground" Value="{DynamicResource TitleBrush}"/>
         </Style>
     </Window.Styles>
 
@@ -33,15 +37,20 @@
                 Width="{Binding SidebarWidth}"
                 Background="{DynamicResource SidebarBrush}"
                 BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
-            <Grid RowDefinitions="56,*,Auto">
+            <Border.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Width" Duration="0:0:0.25" Easing="CubicEaseInOut"/>
+                </Transitions>
+            </Border.Transitions>
+            <Grid RowDefinitions="48,*,Auto">
                 <!-- Toggle button -->
                 <Button Grid.Row="0"
                         Command="{Binding ToggleSidebarCommand}"
                         Background="Transparent"
                         Foreground="{DynamicResource TitleBrush}"
-                        HorizontalAlignment="Stretch"
-                        Content="≡" FontSize="22" FontWeight="Light"
-                        Height="56" Padding="0" Cursor="Hand">
+                        HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
+                        Content="&#x2630;" FontSize="20"
+                        Height="48" Padding="0" Cursor="Hand">
                     <Button.Styles>
                         <Style Selector="Button:pointerover /template/ ContentPresenter">
                             <Setter Property="Background" Value="{DynamicResource SidebarHoverBrush}"/>
@@ -59,7 +68,7 @@
                          Background="Transparent"
                          BorderThickness="0">
                     <ListBoxItem>
-                        <Grid ColumnDefinitions="36,*" Height="40" Margin="4,0">
+                        <Grid ColumnDefinitions="40,*" Height="40" VerticalAlignment="Center">
                             <TextBlock Grid.Column="0" Text="&#x1F50D;"
                                        FontSize="16"
                                        VerticalAlignment="Center"
@@ -67,12 +76,18 @@
                             <TextBlock Grid.Column="1" Text="查询"
                                        VerticalAlignment="Center" FontSize="13.5"
                                        Foreground="{DynamicResource ValueBrush}"
-                                       Margin="6,0,0,0"
-                                       IsVisible="{Binding IsSidebarExpanded}"/>
+                                       Margin="4,0,0,0"
+                                       Opacity="{Binding IsSidebarExpanded, Converter={x:Static local:AppConverters.BoolToDouble}}">
+                                <TextBlock.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="SineEaseInOut"/>
+                                    </Transitions>
+                                </TextBlock.Transitions>
+                            </TextBlock>
                         </Grid>
                     </ListBoxItem>
                     <ListBoxItem>
-                        <Grid ColumnDefinitions="36,*" Height="40" Margin="4,0">
+                        <Grid ColumnDefinitions="40,*" Height="40" VerticalAlignment="Center">
                             <TextBlock Grid.Column="0" Text="&#x2699;"
                                        FontSize="18"
                                        VerticalAlignment="Center"
@@ -80,8 +95,14 @@
                             <TextBlock Grid.Column="1" Text="推送设置"
                                        VerticalAlignment="Center" FontSize="13.5"
                                        Foreground="{DynamicResource ValueBrush}"
-                                       Margin="6,0,0,0"
-                                       IsVisible="{Binding IsSidebarExpanded}"/>
+                                       Margin="4,0,0,0"
+                                       Opacity="{Binding IsSidebarExpanded, Converter={x:Static local:AppConverters.BoolToDouble}}">
+                                <TextBlock.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="SineEaseInOut"/>
+                                    </Transitions>
+                                </TextBlock.Transitions>
+                            </TextBlock>
                         </Grid>
                     </ListBoxItem>
                 </ListBox>
@@ -90,14 +111,15 @@
                 <StackPanel Grid.Row="2" Margin="4,4,4,8" Spacing="4">
                     <Button Command="{Binding ToggleThemeCommand}"
                             Background="Transparent"
-                            Height="36" Padding="8,0" Cursor="Hand"
-                            HorizontalContentAlignment="Left">
+                            Height="36" Padding="4,0" Cursor="Hand"
+                            VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center">
                         <Button.Styles>
                             <Style Selector="Button:pointerover /template/ ContentPresenter">
                                 <Setter Property="Background" Value="{DynamicResource SidebarHoverBrush}"/>
                             </Style>
                         </Button.Styles>
-                        <Grid ColumnDefinitions="36,*">
+                        <Grid ColumnDefinitions="40,*">
                             <TextBlock Grid.Column="0" Text="&#x2600;"
                                        FontSize="18"
                                        VerticalAlignment="Center"
@@ -110,12 +132,18 @@
                                        IsVisible="{Binding IsDarkTheme, Converter={x:Static BoolConverters.Not}}"/>
                             <TextBlock Grid.Column="1" Text="深色模式"
                                        VerticalAlignment="Center" FontSize="13"
-                                       Margin="6,0,0,0"
+                                       Margin="4,0,0,0"
                                        Foreground="{DynamicResource LabelBrush}"
-                                       IsVisible="{Binding IsSidebarExpanded}"/>
+                                       Opacity="{Binding IsSidebarExpanded, Converter={x:Static local:AppConverters.BoolToDouble}}">
+                                <TextBlock.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="SineEaseInOut"/>
+                                    </Transitions>
+                                </TextBlock.Transitions>
+                            </TextBlock>
                         </Grid>
                     </Button>
-                    <TextBlock Text="水电查询 v1.0"
+                    <TextBlock Text="水电查询 v1.1"
                                Foreground="{DynamicResource HintBrush}" FontSize="11"
                                Margin="12,0" IsVisible="{Binding IsSidebarExpanded}"/>
                 </StackPanel>

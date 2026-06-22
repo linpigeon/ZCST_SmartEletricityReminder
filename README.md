@@ -2,14 +2,15 @@
 
 ![应用截图](pic/屏幕截图%202026-05-27%20204521.png)
 
-珠海科技学院宿舍电费查询与推送系统，基于"完美校园"（17wanxiao）API，支持邮箱和噔噔推送两种通知方式。
+珠海科技学院宿舍电费查询与推送系统，基于"完美校园"（17wanxiao）API，支持邮箱、噔噔和 MQTT 三种推送通知方式。
 
 ## 功能
 
 - 查询绑定宿舍的电费余额和用量
-- 余额低于阈值时自动发送提醒（邮件 / 噔噔推送）
+- 余额低于阈值时自动发送提醒（邮件 / 噔噔推送 / MQTT）
 - 定时循环查询与推送
-- 桌面 GUI（Avalonia），支持浅色/深色主题切换
+- 桌面 GUI（Avalonia），Fluent Design 风格，支持浅色/深色主题切换
+- 侧边栏导航（支持折叠动画）
 - 系统托盘驻留后台运行
 
 ## 技术栈
@@ -18,6 +19,7 @@
 - Avalonia 12.0（跨平台桌面 UI）
 - CommunityToolkit.Mvvm 8.4（MVVM 工具包）
 - System.Net.Mail（SMTP 邮件发送）
+- MQTTnet 5.0（MQTT 协议推送）
 
 ## 技术架构
 
@@ -56,12 +58,13 @@
     │  │  解析嵌套 JSON → List<RoomInfo>       │  │
     │  └──────────────┬───────────────────────┘  │
     │                 │                          │
-    │     ┌───────────┴───────────┐              │
-    │     │                       │              │
-    │  ┌──▼──────────┐  ┌────────▼─────────┐     │
-    │  │ EmailService │  │DengDengPushSvc   │     │
-    │  │ SMTP → 邮件   │  │ HTTP GET → 推送   │     │
-    │  └──────────────┘  └──────────────────┘     │
+    │     ┌───────────┼───────────┐              │
+    │     │           │           │              │
+    │  ┌──▼──────┐ ┌──▼──────┐ ┌──▼────────┐    │
+    │  │ Email   │ │DengDeng │ │  Mqtt     │    │
+    │  │ Service │ │PushSvc  │ │ Service   │    │
+    │  │ SMTP    │ │HTTP GET │ │ MQTTnet   │    │
+    │  └─────────┘ └─────────┘ └───────────┘    │
     │                                             │
     │  ┌──────────────────────────────────────┐   │
     │  │  SettingsService                     │   │
@@ -78,7 +81,7 @@
 
 1. `QueryViewModel` 接收用户输入的学号，调用 `PerfectCampusApiClient.GetBoundRoomsAsync()` 向完美校园 API 发送 POST 请求
 2. API 返回的 JSON 经 `JsonResponseParser` 解析为 `List<RoomInfo>`，包含房间名称、余额、用量、在线状态
-3. ViewModel 将结果绑定到 View 展示；如需推送，调用 `EmailService` / `DengDengPushService` 发送通知
+3. ViewModel 将结果绑定到 View 展示；如需推送，调用 `EmailService` / `DengDengPushService` / `MqttService` 发送通知
 4. 当任一房间余额低于 `LowBalanceThreshold` 时，推送内容会包含低余额警告标记
 
 **双模式运行**：
@@ -98,13 +101,15 @@
 ├── Program.cs                        # 启动入口（GUI / --auto 模式）
 ├── appsettings.json                  # 配置文件
 ├── Models/
-│   ├── EmailSettings.cs              # SMTP / 查询 / 噔噔配置模型
+│   ├── EmailSettings.cs              # SMTP / 查询 / 噔噔 / MQTT 配置模型
 │   └── RoomInfo.cs                   # 房间数据模型
+├── Converters.cs                     # 通用值转换器（BoolToDouble 等）
 ├── Services/
 │   ├── PerfectCampusApiClient.cs     # 完美校园 API 客户端
 │   ├── JsonResponseParser.cs         # API 响应 JSON 解析
 │   ├── EmailService.cs              # 邮件发送服务
 │   ├── DengDengPushService.cs       # 噔噔推送服务
+│   ├── MqttService.cs               # MQTT 推送服务
 │   └── SettingsService.cs           # 配置文件读写
 ├── ViewModels/
 │   ├── MainWindowViewModel.cs        # 主窗口 VM（导航、主题）
@@ -139,7 +144,15 @@
   "DengDengSettings": {
     "BaseUrl": "https://your-dengdeng-server.com",
     "DeviceId": "your_device_id",
-    "Enabled": true
+    "Enabled": false
+  },
+  "MqttSettings": {
+    "BrokerAddress": "your-mqtt-broker-ip",
+    "Port": 1883,
+    "Username": "",
+    "Password": "",
+    "Topic": "electricity/reminder",
+    "Enabled": false
   }
 }
 ```
@@ -150,6 +163,8 @@
 | `QuerySettings.Account` | 完美校园绑定的学号 |
 | `QuerySettings.LowBalanceThreshold` | 低余额告警阈值（度） |
 | `DengDengSettings.Enabled` | 是否启用噔噔推送 |
+| `MqttSettings.BrokerAddress` | MQTT Broker 地址（支持 `mqtt://` / `tcp://` 前缀） |
+| `MqttSettings.Enabled` | 是否启用 MQTT 推送 |
 
 ## 运行
 

@@ -24,6 +24,14 @@ public partial class PushSettingsViewModel : ObservableObject
     [ObservableProperty] private string _dengDengBaseUrl = "";
     [ObservableProperty] private string _dengDengDeviceId = "";
 
+    // MQTT settings
+    [ObservableProperty] private bool _mqttEnabled;
+    [ObservableProperty] private string _mqttBrokerAddress = "";
+    [ObservableProperty] private int _mqttPort = 1883;
+    [ObservableProperty] private string _mqttUsername = "";
+    [ObservableProperty] private string _mqttPassword = "";
+    [ObservableProperty] private string _mqttTopic = "electricity/reminder";
+
     // Shared state
     [ObservableProperty] private double _lowBalanceThreshold = 20.0;
     [ObservableProperty] private int _intervalMinutes = 30;
@@ -62,6 +70,14 @@ public partial class PushSettingsViewModel : ObservableObject
         DengDengBaseUrl = dengDeng.BaseUrl;
         DengDengDeviceId = dengDeng.DeviceId;
 
+        var mqtt = SettingsService.LoadMqttSettings();
+        MqttEnabled = mqtt.Enabled;
+        MqttBrokerAddress = mqtt.BrokerAddress;
+        MqttPort = mqtt.Port;
+        MqttUsername = mqtt.Username;
+        MqttPassword = mqtt.Password;
+        MqttTopic = mqtt.Topic;
+
         var query = SettingsService.LoadQuerySettings();
         LowBalanceThreshold = query.LowBalanceThreshold;
         IntervalMinutes = query.IntervalMinutes > 0 ? query.IntervalMinutes : 30;
@@ -92,12 +108,22 @@ public partial class PushSettingsViewModel : ObservableObject
             DeviceId = DengDengDeviceId
         };
 
+        var mqtt = new MqttSettings
+        {
+            Enabled = MqttEnabled,
+            BrokerAddress = MqttBrokerAddress,
+            Port = MqttPort,
+            Username = MqttUsername,
+            Password = MqttPassword,
+            Topic = MqttTopic
+        };
+
         var query = SettingsService.LoadQuerySettings();
         query.LowBalanceThreshold = LowBalanceThreshold;
         query.IntervalMinutes = IntervalMinutes;
         query.Account = Account;
 
-        SettingsService.SaveAllSettings(email, query, dengDeng);
+        SettingsService.SaveAllSettings(email, query, dengDeng, mqtt);
         StatusMessage = "设置已保存";
     }
 
@@ -279,6 +305,44 @@ public partial class PushSettingsViewModel : ObservableObject
             catch (Exception ex)
             {
                 results.Add($"噔噔失败: {ex.Message}");
+            }
+        }
+
+        // MQTT
+        var mqtt = new MqttSettings
+        {
+            Enabled = MqttEnabled,
+            BrokerAddress = MqttBrokerAddress,
+            Port = MqttPort,
+            Username = MqttUsername,
+            Password = MqttPassword,
+            Topic = MqttTopic
+        };
+
+        if (mqtt.Enabled)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(mqtt.BrokerAddress))
+                {
+                    results.Add("MQTT: 配置不完整");
+                }
+                else
+                {
+                    var mqttService = new MqttService(mqtt, LowBalanceThreshold);
+                    var ok = await mqttService.SendReportAsync(rooms);
+                    results.Add(ok ? "MQTT已发送" : "MQTT失败");
+
+                    var lowBalance = rooms.Where(r => r.Odd < LowBalanceThreshold).ToList();
+                    if (lowBalance.Count > 0)
+                    {
+                        await mqttService.SendLowBalanceAlertAsync(lowBalance, LowBalanceThreshold);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                results.Add($"MQTT失败: {ex.Message}");
             }
         }
 

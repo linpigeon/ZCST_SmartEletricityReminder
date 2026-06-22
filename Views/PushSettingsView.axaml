@@ -9,43 +9,22 @@
             <Setter Property="Height" Value="34"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
-        <Style Selector="Button.accent">
-            <Setter Property="Background" Value="#0078D4"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="Button.accent:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#1a8ae8"/>
-        </Style>
-        <Style Selector="Button.default">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource ValueBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="Button.default:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource NavHoverBrush}"/>
-        </Style>
     </UserControl.Styles>
 
     <ScrollViewer>
-        <StackPanel Margin="20" Spacing="16">
+        <StackPanel Margin="24" Spacing="16">
             <TextBlock Text="推送设置" FontSize="22" FontWeight="SemiBold"
                        Foreground="{DynamicResource TitleBrush}"/>
 
             <!-- Email settings card -->
-            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
-                    BoxShadow="0 1 3 0 #0F000000">
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="24"
+                    BoxShadow="0 2 4 0 #14000000">
                 <StackPanel Spacing="12">
-                    <TextBlock Text="邮件推送" FontSize="15" FontWeight="SemiBold"
+                    <TextBlock Text="邮件推送" FontSize="16" FontWeight="SemiBold"
                                Foreground="{DynamicResource HeadingBrush}"/>
 
                     <Grid ColumnDefinitions="110,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-                          RowSpacing="8">
+                          RowSpacing="10">
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="SMTP 服务器"
                                    VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
                         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SmtpServer}" Classes="setting"/>
@@ -72,7 +51,7 @@
                         <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding RecipientEmails}" Classes="setting"
                                  PlaceholderText="多个邮箱用分号 (;) 分隔"/>
 
-                        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" Spacing="8">
                             <CheckBox IsChecked="{Binding EnableSsl}"/>
                             <TextBlock Text="启用 SSL" VerticalAlignment="Center"
                                        Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
@@ -82,16 +61,16 @@
             </Border>
 
             <!-- DengDeng settings card -->
-            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
-                    BoxShadow="0 1 3 0 #0F000000">
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="24"
+                    BoxShadow="0 2 4 0 #14000000">
                 <StackPanel Spacing="12">
-                    <StackPanel Orientation="Horizontal" Spacing="6">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
                         <CheckBox IsChecked="{Binding DengDengEnabled}"/>
-                        <TextBlock Text="噔噔推送" FontSize="15" FontWeight="SemiBold"
+                        <TextBlock Text="噔噔推送" FontSize="16" FontWeight="SemiBold"
                                    Foreground="{DynamicResource HeadingBrush}"/>
                     </StackPanel>
 
-                    <Grid ColumnDefinitions="80,*" RowDefinitions="Auto,Auto" RowSpacing="8"
+                    <Grid ColumnDefinitions="80,*" RowDefinitions="Auto,Auto" RowSpacing="10"
                           IsEnabled="{Binding DengDengEnabled}">
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Base URL"
                                    VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
@@ -104,11 +83,49 @@
                 </StackPanel>
             </Border>
 
-            <!-- Threshold card -->
-            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
-                    BoxShadow="0 1 3 0 #0F000000">
+            <!-- MQTT settings card -->
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="24"
+                    BoxShadow="0 2 4 0 #14000000">
                 <StackPanel Spacing="12">
-                    <TextBlock Text="预警阈值" FontSize="15" FontWeight="SemiBold"
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <CheckBox IsChecked="{Binding MqttEnabled}"/>
+                        <TextBlock Text="MQTT推送" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource HeadingBrush}"/>
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="110,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="10"
+                          IsEnabled="{Binding MqttEnabled}">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Broker 地址"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding MqttBrokerAddress}" Classes="setting"
+                                 PlaceholderText="例如 192.168.1.100"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="端口"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MqttPort}" Classes="setting" Width="100"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="用户名"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MqttUsername}" Classes="setting"
+                                 PlaceholderText="可选"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="密码"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MqttPassword}" Classes="setting"
+                                 PasswordChar="&#x25CF;" PlaceholderText="可选"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="主题 (Topic)"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding MqttTopic}" Classes="setting"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Threshold card -->
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="24"
+                    BoxShadow="0 2 4 0 #14000000">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="预警阈值" FontSize="16" FontWeight="SemiBold"
                                Foreground="{DynamicResource HeadingBrush}"/>
                     <Grid ColumnDefinitions="140,*">
                         <TextBlock Grid.Column="0" Text="低余额阈值 (度)"
@@ -120,13 +137,13 @@
             </Border>
 
             <!-- Auto-push card -->
-            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
-                    BoxShadow="0 1 3 0 #0F000000">
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="24"
+                    BoxShadow="0 2 4 0 #14000000">
                 <StackPanel Spacing="12">
-                    <TextBlock Text="自动推送" FontSize="15" FontWeight="SemiBold"
+                    <TextBlock Text="自动推送" FontSize="16" FontWeight="SemiBold"
                                Foreground="{DynamicResource HeadingBrush}"/>
 
-                    <Grid ColumnDefinitions="140,*" RowSpacing="8"
+                    <Grid ColumnDefinitions="140,*" RowSpacing="10"
                           RowDefinitions="Auto,Auto,Auto">
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="推送间隔 (分钟)"
                                    VerticalAlignment="Center" Foreground="{DynamicResource LabelBrush}" FontSize="13"/>
@@ -152,8 +169,8 @@
             </Border>
 
             <!-- Action buttons -->
-            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="20"
-                    BoxShadow="0 1 3 0 #0F000000">
+            <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="24"
+                    BoxShadow="0 2 4 0 #14000000">
                 <StackPanel Spacing="10">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <Button Content="保存设置" Command="{Binding SaveSettingsCommand}"
@@ -173,7 +190,7 @@
                     </StackPanel>
                     <ProgressBar IsIndeterminate="True" Height="3"
                                  IsVisible="{Binding IsTesting}"
-                                 Foreground="#0078D4" Background="Transparent"/>
+                                 Foreground="{DynamicResource AccentBrush}" Background="Transparent"/>
                     <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource LabelBrush}"
                                FontSize="12" TextWrapping="Wrap"/>
                 </StackPanel>

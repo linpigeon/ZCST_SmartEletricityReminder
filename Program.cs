@@ -32,7 +32,7 @@ class Program
 
     static async Task RunAutoModeAsync()
     {
-        var (emailSettings, querySettings, dengDengSettings) = LoadConfig();
+        var (emailSettings, querySettings, dengDengSettings, mqttSettings) = LoadConfig();
 
         if (string.IsNullOrWhiteSpace(querySettings.Account))
         {
@@ -52,6 +52,12 @@ class Program
         if (dengDengSettings.Enabled && !string.IsNullOrWhiteSpace(dengDengSettings.BaseUrl) && !string.IsNullOrWhiteSpace(dengDengSettings.DeviceId))
         {
             pushService = new DengDengPushService(dengDengSettings);
+        }
+
+        MqttService? mqttService = null;
+        if (mqttSettings.Enabled && !string.IsNullOrWhiteSpace(mqttSettings.BrokerAddress))
+        {
+            mqttService = new MqttService(mqttSettings, querySettings.LowBalanceThreshold);
         }
 
         do
@@ -89,6 +95,18 @@ class Program
                             Console.WriteLine("🔔 噔噔低余额预警已发送");
                         }
                     }
+
+                    if (mqttService != null)
+                    {
+                        var ok = await mqttService.SendReportAsync(rooms);
+                        Console.WriteLine(ok ? "📡 MQTT推送已发送" : "📡 MQTT推送失败");
+
+                        var lowBalanceRooms = rooms.FindAll(r => r.Odd < querySettings.LowBalanceThreshold);
+                        if (lowBalanceRooms.Count > 0)
+                        {
+                            await mqttService.SendLowBalanceAlertAsync(lowBalanceRooms, querySettings.LowBalanceThreshold);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -105,12 +123,13 @@ class Program
         } while (querySettings.IntervalMinutes > 0);
     }
 
-    static (EmailSettings email, QuerySettings query, DengDengSettings dengDeng) LoadConfig()
+    static (EmailSettings email, QuerySettings query, DengDengSettings dengDeng, MqttSettings mqtt) LoadConfig()
     {
         return (
             SettingsService.LoadEmailSettings(),
             SettingsService.LoadQuerySettings(),
-            SettingsService.LoadDengDengSettings()
+            SettingsService.LoadDengDengSettings(),
+            SettingsService.LoadMqttSettings()
         );
     }
 }
